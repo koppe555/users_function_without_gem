@@ -1,11 +1,13 @@
 class User < ApplicationRecord
+
   has_secure_password validation: true
 
   validates :name,  presence: true, length: { maximum: 15 }
-  validates :mail, presence: true, uniqueness: true
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@aoyama.jp/
+  validates :mail, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX },  uniqueness: true
 
   def self.new_remember_token
-    Secure.Random.urlsafe_base64
+    SecureRandom.urlsafe_base64
   end
 
   def self.encrypt(token)
